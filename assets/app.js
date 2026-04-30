@@ -26,6 +26,12 @@
     prev: document.querySelector('[data-prev]'),
     next: document.querySelector('[data-next]'),
     topbar: document.querySelector('[data-topbar]'),
+    quickToggles: document.querySelectorAll('[data-quick-toggle]'),
+    quickPanels: document.querySelectorAll('[data-quick-panel]'),
+    quickCategories: document.querySelector('[data-quick-categories]'),
+    quickNavList: document.querySelector('[data-quick-nav-list]'),
+    scrollTop: document.querySelector('[data-scroll-top]'),
+    scrollBottom: document.querySelector('[data-scroll-bottom]'),
   };
 
   function escapeHtml(value) {
@@ -52,6 +58,11 @@
     return `<span class="badge">${escapeHtml(label)}</span>`;
   }
 
+  function categoryCount(category) {
+    if (category === '全部文章') return data.articles.length;
+    return data.articles.filter((article) => article.categories.includes(category)).length;
+  }
+
   function renderFeatured() {
     const featured = data.featuredIds
       .map((id) => data.articles.find((article) => article.id === id))
@@ -76,6 +87,15 @@
         ${escapeHtml(category)}
       </button>
     `).join('');
+
+    if (els.quickCategories) {
+      els.quickCategories.innerHTML = data.categories.map((category) => `
+        <button class="quick-category-button${category === state.category ? ' is-active' : ''}" type="button" data-quick-category="${escapeHtml(category)}">
+          <span>${escapeHtml(category)}</span>
+          <strong>${categoryCount(category)}</strong>
+        </button>
+      `).join('');
+    }
   }
 
   function matches(article) {
@@ -90,6 +110,7 @@
 
     if (!state.visible.length) {
       els.articles.innerHTML = '<div class="empty-state">没有匹配文章。换个关键词或分类试试。</div>';
+      renderQuickNav();
       return;
     }
 
@@ -105,6 +126,27 @@
           <div class="source">${escapeHtml(article.sourceFile)}</div>
         </div>
       </article>
+    `).join('');
+    renderQuickNav();
+  }
+
+  function shortenTitle(title) {
+    return title.length > 24 ? `${title.slice(0, 23)}…` : title;
+  }
+
+  function renderQuickNav() {
+    if (!els.quickNavList) return;
+
+    if (!state.visible.length) {
+      els.quickNavList.innerHTML = '<div class="quick-nav-empty">无匹配文章</div>';
+      return;
+    }
+
+    els.quickNavList.innerHTML = state.visible.map((article, index) => `
+      <button class="quick-nav-item" type="button" data-open="${article.id}" title="${escapeHtml(article.title)}">
+        <span>${String(index + 1).padStart(2, '0')}</span>
+        <strong>${escapeHtml(shortenTitle(article.title))}</strong>
+      </button>
     `).join('');
   }
 
@@ -238,6 +280,27 @@
     if (next) openArticle(next.id);
   }
 
+  function setQuickPanel(panelName) {
+    els.quickToggles.forEach((toggle) => {
+      toggle.setAttribute('aria-expanded', String(toggle.dataset.quickToggle === panelName));
+    });
+    els.quickPanels.forEach((panel) => {
+      panel.hidden = panel.dataset.quickPanel !== panelName;
+    });
+  }
+
+  function selectCategory(category, shouldScroll) {
+    state.category = category;
+    state.currentId = null;
+    renderCategories();
+    renderArticles();
+    syncUrl('replace');
+    if (shouldScroll) setQuickPanel('articles');
+    if (shouldScroll) {
+      document.querySelector('#library').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
   function handleOpen(event) {
     const card = event.target.closest('[data-open]');
     if (!card) return;
@@ -263,11 +326,19 @@
     els.categories.addEventListener('click', (event) => {
       const button = event.target.closest('[data-category]');
       if (!button) return;
-      state.category = button.dataset.category;
-      state.currentId = null;
-      renderCategories();
-      renderArticles();
-      syncUrl('replace');
+      selectCategory(button.dataset.category, false);
+    });
+
+    if (els.quickCategories) els.quickCategories.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-quick-category]');
+      if (!button) return;
+      selectCategory(button.dataset.quickCategory, true);
+    });
+
+    els.quickToggles.forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        setQuickPanel(toggle.dataset.quickToggle);
+      });
     });
 
     document.addEventListener('click', handleOpen);
@@ -280,6 +351,12 @@
     });
     els.prev.addEventListener('click', () => moveReader(-1));
     els.next.addEventListener('click', () => moveReader(1));
+    if (els.scrollTop) els.scrollTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    if (els.scrollBottom) els.scrollBottom.addEventListener('click', () => {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    });
     window.addEventListener('scroll', () => {
       els.topbar.classList.toggle('is-compact', window.scrollY > 80);
     }, { passive: true });
@@ -306,6 +383,7 @@
     renderFeatured();
     renderCategories();
     renderArticles();
+    setQuickPanel('articles');
     bindEvents();
     if (state.currentId) openArticle(state.currentId);
   }

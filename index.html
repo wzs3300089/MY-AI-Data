@@ -94,6 +94,27 @@
       </main>
     </div>
 
+    <aside class="quick-nav" aria-label="快速导航">
+      <div class="quick-nav-actions" aria-label="页面滚动">
+        <button class="quick-nav-button" type="button" data-scroll-top aria-label="快速滑到顶端">↑</button>
+        <button class="quick-nav-button" type="button" data-scroll-bottom aria-label="快速滑到底部">↓</button>
+      </div>
+      <div class="quick-nav-panel">
+        <div class="quick-nav-section">
+          <button class="quick-nav-title" type="button" data-quick-toggle="categories" aria-expanded="false" aria-controls="quick-categories-panel">
+            <span>快速分类</span>
+          </button>
+          <div class="quick-category-list" id="quick-categories-panel" data-quick-panel="categories" data-quick-categories hidden></div>
+        </div>
+        <div class="quick-nav-section">
+          <button class="quick-nav-title" type="button" data-quick-toggle="articles" aria-expanded="true" aria-controls="quick-articles-panel">
+            <span>文章导航</span>
+          </button>
+          <div class="quick-nav-list" id="quick-articles-panel" data-quick-panel="articles" data-quick-nav-list></div>
+        </div>
+      </div>
+    </aside>
+
     <script src="./assets/data.js?v=20260430-default-home"></script>
     <script src="./assets/app.js?v=20260430-default-home"></script>
   </body>
