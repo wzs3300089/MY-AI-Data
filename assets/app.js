@@ -307,8 +307,7 @@
     renderCategories();
     renderArticles();
     bindEvents();
-    const firstArticle = state.currentId || data.featuredIds[0] || data.articles[0]?.id;
-    if (firstArticle) openArticle(firstArticle);
+    if (state.currentId) openArticle(state.currentId);
   }
 
   init();
