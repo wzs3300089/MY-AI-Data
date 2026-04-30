@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI史诗纪实</title>
+    <meta name="description" content="从本地 AI 记录生成的静态知识库，收录 IDE、MCP、Skills、Agent Harness 等主题。">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23ffe84a'/%3E%3Cpath d='M10 43 22 14h8l12 29h-8l-2-6H20l-2 6h-8Zm13-13h7l-3-9h-1l-3 9Zm23 13V14h8v29h-8Z' fill='%2311110f'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="./assets/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#library">跳到文章浏览</a>
+    <div class="site-shell">
+      <header class="topbar" data-topbar>
+        <a class="brand" href="#top" aria-label="返回 AI史诗纪实 首页">
+          <span class="brand-mark">AI</span>
+          <span>史诗纪实</span>
+        </a>
+        <div class="topbar-meta">
+          <span data-total-count>0 篇</span>
+          <span>静态知识库</span>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="kicker">Personal AI Chronicle</p>
+            <h1 id="hero-title">AI史诗纪实</h1>
+            <p class="hero-text">把 IDE、MCP、Skills、Agent Harness 与 AI 工具笔记整理成可搜索、可筛选、可部署的阅读现场。</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#library">浏览知识库</a>
+              <a class="button button-secondary" href="#reader">阅读精选</a>
+            </div>
+          </div>
+          <div class="hero-board" aria-label="知识库概览">
+            <div class="board-card board-main">
+              <span>Source</span>
+              <strong>mydata/我的数据/AI记录</strong>
+            </div>
+            <div class="board-card board-pink">
+              <span>Notes</span>
+              <strong data-hero-count>49</strong>
+            </div>
+            <div class="board-card board-green">
+              <span>Topics</span>
+              <strong>IDE / MCP / Skills / Agent</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="featured-section" aria-labelledby="featured-title">
+          <div class="section-heading">
+            <p class="kicker">Featured Trails</p>
+            <h2 id="featured-title">精选专题</h2>
+          </div>
+          <div class="featured-grid" data-featured></div>
+        </section>
+
+        <section class="library" id="library" aria-labelledby="library-title">
+          <div class="section-heading compact">
+            <p class="kicker">Library</p>
+            <h2 id="library-title">文章浏览</h2>
+          </div>
+
+          <div class="control-panel">
+            <label class="search-box">
+              <span>搜索</span>
+              <input data-search name="q" type="search" placeholder="输入 codex、MCP、Harness、Skills…" autocomplete="off">
+            </label>
+            <div class="result-count" data-result-count>准备载入</div>
+          </div>
+
+          <div class="category-strip" data-categories aria-label="分类筛选"></div>
+          <div class="article-grid" data-articles></div>
+        </section>
+
+        <section class="reader" id="reader" aria-labelledby="reader-title" hidden>
+          <div class="reader-toolbar">
+            <button class="button button-secondary" type="button" data-back>返回列表</button>
+            <div class="reader-nav">
+              <button class="icon-button" type="button" data-prev aria-label="上一篇">←</button>
+              <button class="icon-button" type="button" data-next aria-label="下一篇">→</button>
+            </div>
+          </div>
+          <article class="reader-paper">
+            <p class="kicker" data-reader-category>Article</p>
+            <h2 id="reader-title" data-reader-title></h2>
+            <p class="reader-summary" data-reader-summary></p>
+            <div class="reader-meta" data-reader-meta></div>
+            <div class="markdown-body" data-reader-body></div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="./assets/data.js"></script>
+    <script src="./assets/app.js"></script>
+  </body>
+</html>
